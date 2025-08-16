@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRESKO | Telegram-каналы</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6e45e2;
+            --primary-light: #9d7eff;
+            --secondary: #88d3ce;
+            --accent: #ff7e5f;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            overflow: hidden;
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(110, 69, 226, 0.15) 0%, transparent 25%),
+                        radial-gradient(circle at 80% 70%, rgba(136, 211, 206, 0.15) 0%, transparent 25%);
+            animation: gradientShift 15s infinite alternate;
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+        
+        .floating-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-element:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            top: 60%;
+            left: 70%;
+            animation-delay: -5s;
+        }
+        
+        .floating-element:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            background: var(--accent);
+            top: 30%;
+            left: 80%;
+            animation-delay: -10s;
+        }
+        
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABOSURBVGhD7cExAQAwDMCg+zfd2VAk4A8JqKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj4Ht1kAZa4wJY0AAAAASUVORK5CYII=');
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .header {
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0 0 20px rgba(110, 69, 226, 0.5));
+            transition: all 0.5s ease;
+        }
+        
+        .logo-halo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(110, 69, 226, 0.4) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 10px rgba(110, 69, 226, 0.3);
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        
+        .channels {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .channel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .channel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .channel:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .channel-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--primary-light), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .channel-desc {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            font-size: 1.1rem;
+            font-weight: 400;
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(110, 69, 226, 0.3);
+            z-index: 1;
+            text-decoration: none;
+            width: auto;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(110, 69, 226, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .music-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        
+        .explosion {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background: var(--dark);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+        
+        .explosion.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .explosion-content {
+            position: relative;
+            text-align: center;
+        }
+        
+        .explosion-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 6rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            text-shadow: 0 0 30px rgba(110, 69, 226, 0.5);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        /* Адаптация под разные устройства */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .channel {
+                max-width: 320px;
+                padding: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .channel {
+                max-width: 300px;
+                padding: 1.5rem;
+            }
+            
+            .channel-name {
+                font-size: 1.6rem;
+            }
+            
+            .channel-desc {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+                margin-bottom: 1rem;
+            }
+            
+            h1::after {
+                bottom: -10px;
+                height: 2px;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                max-width: 90%;
+            }
+            
+            .channels {
+                gap: 1.5rem;
+                margin-top: 3rem;
+            }
+            
+            .channel {
+                max-width: 100%;
+                width: 100%;
+                padding: 1.5rem;
+            }
+            
+            .explosion-text {
+                font-size: 3.5rem;
+                letter-spacing: 4px;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .logo-halo {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header {
+                margin-bottom: 2.5rem;
+            }
+            
+            .channel-name {
+                font-size: 1.4rem;
+                margin-bottom: 1rem;
+            }
+            
+            .channel-desc {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .btn {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+                min-width: 160px;
+            }
+            
+            .explosion-text {
+                font-size: 2.5rem;
+            }
+            
+            .music-control {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .music-icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+    <div class="noise"></div>
+    
+    <div class="explosion" id="explosion">
+        <div class="explosion-content">
+            <div class="explosion-text">ПРИВЕТ!</div>
+            <div class="explosion-particles" id="explosion-particles"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo-halo"></div>
+                <img src="https://telegram.org/img/t_logo.png" alt="Telegram" class="logo">
+            </div>
+            <h1>ФРИСКО КФГ</h1>
+            <p class="subtitle">Присоединяйтесь к моим тг-каналам</p>
+        </div>
+        
+        <div class="channels">
+            <div class="channel">
+                <h3 class="channel-name">FreskoHack</h3>
+                <p class="channel-desc">Основной со всеми софтами и другим</p>
+                <button class="btn" onclick="joinChannel('https://t.me/FreskoHack')">Присоединиться</button>
+            </div>
+            
+            <div class="channel">
+                <h3 class="channel-name">Отзывы</h3>
+                <p class="channel-desc">Отзывы покупателей</p>
+                <button class="btn" onclick="joinChannel('https://t.me/otzevfresko')">Присоединиться</button>
+            </div>
+            
+            <div class="channel">
+                <h3 class="channel-name">Новости</h3>
+                <p class="channel-desc">хуй пойми что тут будет</p>
+                <button class="btn" onclick="joinChannel('#')">Скоро</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="music-control" id="musicControl">
+        <svg class="music-icon" viewBox="0 0 24 24">
+            <path id="musicIconPath" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </div>
+    
+    <audio id="bgMusic" loop>
+        <!-- Замените src на путь к вашему аудиофайлу -->
+        <source src="madk1d_-_rekhab_78174139.mp3" type="">
+        Ваш браузер не поддерживает аудио элемент.
+    </audio>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Эффект взрыва при переходе
+        function joinChannel(url) {
+            const explosion = document.getElementById('explosion');
+            
+            // Инициализация частиц для взрыва
+            particlesJS("explosion-particles", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": ["#6e45e2", "#88d3ce", "#ff7e5f", "#ffffff"]
+                    },
+                    "shape": {
+                        "type": "circle"
+                    },
+                    "opacity": {
+                        "value": 0.8,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 5,
+                            "size_min": 1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": false
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 10,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            explosion.classList.add('active');
+            
+            setTimeout(() => {
+                if (url !== '#') {
+                    window.location.href = url;
+                } else {
+                    explosion.classList.remove('active');
+                    document.getElementById('explosion-particles').innerHTML = '';
+                }
+            }, 2000);
+        }
+        
+        // Управление музыкой
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        const musicIconPath = document.getElementById('musicIconPath');
+        let isMusicPlaying = false;
+        
+        // Попытка автоматического воспроизведения с обработкой ошибок
+        function tryAutoplay() {
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    isMusicPlaying = true;
+                    musicIconPath.setAttribute('d', 'M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-2 2.06v2.06c1.45.38 2.5 1.68 2.5 3.18s-1.05 2.8-2.5 3.18v2.06c2.39-.58 4.5-2.56 4.5-5.24s-2.11-4.66-4.5-5.24zm-6.5 2.06v8.28c-.6.34-1 .99-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.73-.4-1.38-1-1.72v-8.28c.6-.34 1-.99 1-1.72 0-1.1-.9-2-2-2s-2 .9-2 2c0 .73.4 1.38 1 1.72z');
+                }).catch(error => {
+                    console.log("Автовоспроизведение запрещено:", error);
+                    isMusicPlaying = false;
+                    musicIconPath.setAttribute('d', 'M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z');
+                });
+            }
+        }
+        
+        // Попробуем автовоспроизведение после взаимодействия пользователя
+        document.addEventListener('click', function initialPlay() {
+            tryAutoplay();
+            document.removeEventListener('click', initialPlay);
+        }, { once: true });
+        
+        musicControl.addEventListener('click', function() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicIconPath.setAttribute('d', 'M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z');
+            } else {
+                bgMusic.play();
+                musicIconPath.setAttribute('d', 'M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-2 2.06v2.06c1.45.38 2.5 1.68 2.5 3.18s-1.05 2.8-2.5 3.18v2.06c2.39-.58 4.5-2.56 4.5-5.24s-2.11-4.66-4.5-5.24zm-6.5 2.06v8.28c-.6.34-1 .99-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.73-.4-1.38-1-1.72v-8.28c.6-.34 1-.99 1-1.72 0-1.1-.9-2-2-2s-2 .9-2 2c0 .73.4 1.38 1 1.72z');
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+    </script>
+</body>
+</html>
